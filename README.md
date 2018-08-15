@@ -1,5 +1,9 @@
 # flutter_vertical_marquee
 
+## screenshot
+
+![image](https://raw.githubusercontent.com/CaiJingLong/some_asset/master/flutter_vertical_marquee1.gif)
+
 ## install
 
 in yaml
