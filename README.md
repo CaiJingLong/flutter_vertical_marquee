@@ -11,7 +11,7 @@ dependencies:
 
   ...
   # marquee
-  flutter_vertical_marquee: ^1.0.0
+  flutter_vertical_marquee: ^0.1.0
 ```
 
 import in dart:
