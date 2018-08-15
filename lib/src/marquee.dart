@@ -9,6 +9,7 @@ class Marquee extends StatefulWidget {
   final Duration scrollDuration;
   final Duration stopDuration;
   final bool tapToNext;
+  final MarqueeController controller;
 
   const Marquee({
     Key key,
@@ -18,6 +19,7 @@ class Marquee extends StatefulWidget {
     this.scrollDuration = const Duration(seconds: 1),
     this.stopDuration = const Duration(seconds: 3),
     this.tapToNext = false,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,8 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
   AnimationController animationConroller;
 
+  MarqueeController get controller => widget.controller;
+
   @override
   void initState() {
     super.initState();
@@ -43,11 +47,19 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
     });
   }
 
+  @override
+  void dispose() {
+    animationConroller.dispose();
+    stopTimer.cancel();
+    super.dispose();
+  }
+
   void next() {
     var listener = () {
       var value = animationConroller.value;
       setState(() {
         percent = value;
+        _refreshControllerValue();
       });
     };
 
@@ -58,15 +70,16 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
       setState(() {
         percent = 0.0;
         current = nextPosition;
+        _refreshControllerValue();
       });
     });
   }
 
-  @override
-  void dispose() {
-    animationConroller.dispose();
-    stopTimer.cancel();
-    super.dispose();
+  void _refreshControllerValue() {
+    controller?.position = current;
+    if (percent > 0.5) {
+      controller?.position = nextPosition;
+    }
   }
 
   @override
@@ -205,4 +218,8 @@ class _MarqueePainter extends CustomPainter {
     }
     return next;
   }
+}
+
+class MarqueeController {
+  int position;
 }

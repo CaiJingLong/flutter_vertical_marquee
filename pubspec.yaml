@@ -1,6 +1,6 @@
 name: flutter_vertical_marquee
-description: A new flutter package project.
-version: 0.1.0
+description: a vertical marquee like html element
+version: 0.1.1
 author: caijinglong<cjl_spy@163.com>
 homepage: https://github.com/CaiJingLong/flutter_vertical_marquee
 

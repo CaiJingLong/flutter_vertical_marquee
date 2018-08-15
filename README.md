@@ -15,7 +15,7 @@ dependencies:
 
   ...
   # marquee
-  flutter_vertical_marquee: ^0.1.0
+  flutter_vertical_marquee: ^0.1.1
 ```
 
 import in dart:
@@ -36,17 +36,24 @@ build widget
 
   Widget _buildMarquee() {
     _initMarquee();
-    return Container(
-      height: 40.0,
-      color: Colors.lightBlueAccent.shade100,
-      child: Marquee(
-        textList: _tipMarqueeList, // your text list
-        fontSize: 14.0, // text size
-        scrollDuration: Duration(seconds: 1), // every scroll duration
-        stopDuration: Duration(seconds: 3), //every stop duration
-        tapToNext: false, // tap to next
-        textColor: Colors.black, // text color
+    var controller = MarqueeController();
+    return GestureDetector(
+      child: Container(
+        height: 40.0,
+        color: Colors.lightBlueAccent.shade100,
+        child: Marquee(
+          textList: _tipMarqueeList, // your text list
+          fontSize: 14.0, // text size
+          scrollDuration: Duration(seconds: 1), // every scroll duration
+          stopDuration: Duration(seconds: 3), //every stop duration
+          tapToNext: false, // tap to next
+          textColor: Colors.black, // text color
+          controller: controller, // the controller can get the position
+        ),
       ),
+      onTap: () {
+        print(controller.position); // get the position
+      },
     );
   }
 ```
