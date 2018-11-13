@@ -45,8 +45,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     animationConroller = AnimationController(vsync: this);
-    stopTimer =
-        Timer.periodic(widget.stopDuration + widget.scrollDuration, (timer) {
+    stopTimer = Timer.periodic(widget.stopDuration + widget.scrollDuration, (timer) {
       next();
     });
   }
@@ -68,9 +67,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
     };
 
     animationConroller.addListener(listener);
-    animationConroller
-        .animateTo(1.0, duration: widget.scrollDuration * (1 - percent))
-        .then((t) {
+    animationConroller.animateTo(1.0, duration: widget.scrollDuration * (1 - percent)).then((t) {
       animationConroller.removeListener(listener);
       animationConroller.value = 0.0;
       setState(() {
@@ -90,10 +87,9 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    assert(!(textList.isNotEmpty && textSpanList.isNotEmpty),
-        "textList and textSpanList cannot have elements at the same time.");
+    assert(!(textList.isNotEmpty && textSpanList.isNotEmpty), "textList and textSpanList cannot have elements at the same time.");
 
-    if (textList == null || textList.isEmpty) {
+    if (textList == null || textSpanList.isEmpty) {
       return Container();
     }
 
@@ -126,6 +122,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
         child: Container(),
         painter: _MarqueePainter(
           widget.textList,
+          textSpanList: textSpanList,
           fontSize: widget.fontSize,
           textColor: widget.textColor,
           verticalSpace: 0.0,
@@ -146,8 +143,15 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   }
 
   int get nextPosition {
+    List list;
+    if (textSpanList.isNotEmpty) {
+      list = textSpanList;
+    } else {
+      list = textList;
+    }
+
     var next = current + 1;
-    if (next >= textList.length) {
+    if (next >= list.length) {
       next = 0;
     }
     return next;
@@ -175,8 +179,7 @@ class _MarqueePainter extends CustomPainter {
     this.current,
   });
 
-  TextPainter textPainter = TextPainter(
-      textDirection: TextDirection.ltr, textAlign: TextAlign.center);
+  TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr, textAlign: TextAlign.center);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -219,8 +222,7 @@ class _MarqueePainter extends CustomPainter {
     textPainter.paint(canvas, _getTextOffset(textPainter, size, isNext: true));
   }
 
-  Offset _getTextOffset(TextPainter textPainter, Size size,
-      {bool isNext = false}) {
+  Offset _getTextOffset(TextPainter textPainter, Size size, {bool isNext = false}) {
     var width = textPainter.width;
     if (width >= size.width) {
       width = size.width;
