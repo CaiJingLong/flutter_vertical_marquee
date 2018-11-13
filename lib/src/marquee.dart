@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class Marquee extends StatefulWidget {
   final List<String> textList;
+  final List<TextSpan> textSpanList;
   final double fontSize;
   final Color textColor;
   final Duration scrollDuration;
@@ -14,6 +15,7 @@ class Marquee extends StatefulWidget {
   const Marquee({
     Key key,
     this.textList = const [],
+    this.textSpanList = const [],
     this.fontSize = 14.0,
     this.textColor = Colors.black,
     this.scrollDuration = const Duration(seconds: 1),
@@ -31,6 +33,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   int current = 0;
 
   List<String> get textList => widget.textList;
+  List<TextSpan> get textSpanList => widget.textSpanList;
 
   Timer stopTimer;
 
@@ -84,7 +87,9 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (textList == null || textList.isEmpty) {
+    assert(!(textList.isNotEmpty && textSpanList.isNotEmpty), "textList and textSpanList cannot have elements at the same time.");
+
+    if (textList == null || textSpanList.isEmpty) {
       return Container();
     }
 
@@ -100,11 +105,24 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
       );
     }
 
+    if (textSpanList.length == 1) {
+      return Center(
+        child: Text.rich(
+          textSpanList[0],
+          style: TextStyle(
+            fontSize: widget.fontSize,
+            color: widget.textColor,
+          ),
+        ),
+      );
+    }
+
     Widget _widget = ClipRect(
       child: CustomPaint(
         child: Container(),
         painter: _MarqueePainter(
           widget.textList,
+          textSpanList: textSpanList,
           fontSize: widget.fontSize,
           textColor: widget.textColor,
           verticalSpace: 0.0,
@@ -125,8 +143,15 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   }
 
   int get nextPosition {
+    List list;
+    if (textSpanList.isNotEmpty) {
+      list = textSpanList;
+    } else {
+      list = textList;
+    }
+
     var next = current + 1;
-    if (next >= textList.length) {
+    if (next >= list.length) {
       next = 0;
     }
     return next;
@@ -135,6 +160,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
 class _MarqueePainter extends CustomPainter {
   List<String> textList;
+  List<TextSpan> textSpanList;
   double verticalSpace;
   double fontSize;
   Color textColor;
@@ -145,6 +171,7 @@ class _MarqueePainter extends CustomPainter {
 
   _MarqueePainter(
     this.textList, {
+    this.textSpanList,
     this.fontSize,
     this.textColor,
     this.verticalSpace,
@@ -160,15 +187,23 @@ class _MarqueePainter extends CustomPainter {
     _paintNext(size, canvas);
   }
 
-  void _paintCurrent(Size size, Canvas canvas) {
+  TextSpan getTextSpan(int position) {
+    if (textSpanList.isNotEmpty) {
+      return textSpanList[position];
+    }
+
     String text = textList[current];
-    textPainter.text = TextSpan(
+    return TextSpan(
       text: text,
       style: TextStyle(
         fontSize: fontSize,
         color: textColor,
       ),
     );
+  }
+
+  void _paintCurrent(Size size, Canvas canvas) {
+    textPainter.text = getTextSpan(current);
     textPainter.textAlign = TextAlign.center;
     textPainter.maxLines = 1;
     textPainter.ellipsis = "...";
@@ -178,14 +213,7 @@ class _MarqueePainter extends CustomPainter {
   }
 
   _paintNext(Size size, Canvas canvas) {
-    String text = textList[nextPosition];
-    textPainter.text = TextSpan(
-      text: text,
-      style: TextStyle(
-        fontSize: fontSize,
-        color: textColor,
-      ),
-    );
+    textPainter.text = getTextSpan(nextPosition);
     textPainter.textAlign = TextAlign.center;
     textPainter.maxLines = 1;
     textPainter.ellipsis = "...";
@@ -212,8 +240,15 @@ class _MarqueePainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 
   int get nextPosition {
+    List list;
+    if (textSpanList.isNotEmpty) {
+      list = textSpanList;
+    } else {
+      list = textList;
+    }
+
     var next = current + 1;
-    if (next >= textList.length) {
+    if (next >= list.length) {
       next = 0;
     }
     return next;

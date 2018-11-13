@@ -15,7 +15,7 @@ dependencies:
 
   ...
   # marquee
-  flutter_vertical_marquee: ^0.1.1
+  flutter_vertical_marquee: ^0.2.0
 ```
 
 import in dart:
@@ -42,7 +42,8 @@ build widget
         height: 40.0,
         color: Colors.lightBlueAccent.shade100,
         child: Marquee(
-          textList: _tipMarqueeList, // your text list
+          textList: _tipMarqueeList, // List<Text>, textList and textSpanList can only have one of code.
+          textSpanList: // List<TextSpan> text, textList and textSpanList can only have one of code.
           fontSize: 14.0, // text size
           scrollDuration: Duration(seconds: 1), // every scroll duration
           stopDuration: Duration(seconds: 3), //every stop duration
