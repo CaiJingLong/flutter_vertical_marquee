@@ -45,8 +45,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     animationConroller = AnimationController(vsync: this);
-    stopTimer =
-        Timer.periodic(widget.stopDuration + widget.scrollDuration, (timer) {
+    stopTimer = Timer.periodic(widget.stopDuration + widget.scrollDuration, (timer) {
       next();
     });
   }
@@ -68,9 +67,7 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
     };
 
     animationConroller.addListener(listener);
-    animationConroller
-        .animateTo(1.0, duration: widget.scrollDuration * (1 - percent))
-        .then((t) {
+    animationConroller.animateTo(1.0, duration: widget.scrollDuration * (1 - percent)).then((t) {
       animationConroller.removeListener(listener);
       animationConroller.value = 0.0;
       setState(() {
@@ -90,11 +87,9 @@ class _MarqueeState extends State<Marquee> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    assert(!(textList.isNotEmpty && textSpanList.isNotEmpty),
-        "textList and textSpanList cannot have elements at the same time.");
+    assert(!(textList.isNotEmpty && textSpanList.isNotEmpty), "textList and textSpanList cannot have elements at the same time.",);
 
-    if ((textList == null || textList.isEmpty) &&
-        (textSpanList == null || textSpanList.isEmpty)) {
+    if ((textList == null || textList.isEmpty) && (textSpanList == null || textSpanList.isEmpty)) {
       return Container();
     }
 
@@ -184,8 +179,7 @@ class _MarqueePainter extends CustomPainter {
     this.current,
   });
 
-  TextPainter textPainter = TextPainter(
-      textDirection: TextDirection.ltr, textAlign: TextAlign.center);
+  TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr, textAlign: TextAlign.center);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -198,7 +192,7 @@ class _MarqueePainter extends CustomPainter {
       return textSpanList[position];
     }
 
-    String text = textList[current];
+    String text = textList[position];
     return TextSpan(
       text: text,
       style: TextStyle(
@@ -228,8 +222,11 @@ class _MarqueePainter extends CustomPainter {
     textPainter.paint(canvas, _getTextOffset(textPainter, size, isNext: true));
   }
 
-  Offset _getTextOffset(TextPainter textPainter, Size size,
-      {bool isNext = false}) {
+  Offset _getTextOffset(
+    TextPainter textPainter,
+    Size size, {
+    bool isNext = false,
+  }) {
     var width = textPainter.width;
     if (width >= size.width) {
       width = size.width;

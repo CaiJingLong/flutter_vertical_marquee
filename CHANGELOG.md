@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [0.2.2]
+
+fix position bug
+
 ## [0.2.1]
 
 fix if
