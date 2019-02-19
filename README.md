@@ -1,12 +1,16 @@
 # flutter_vertical_marquee
 
+[![pub package](https://img.shields.io/pub/v/flutter_vertical_marquee.svg)](https://pub.dartlang.org/packages/flutter_vertical_marquee)
+
 ## screenshot
 
 ![image](https://raw.githubusercontent.com/CaiJingLong/some_asset/master/flutter_vertical_marquee1.gif)
 
 ## install
 
-in yaml
+latest_version: [![pub package](https://img.shields.io/pub/v/flutter_vertical_marquee.svg)](https://pub.dartlang.org/packages/flutter_vertical_marquee)
+
+yaml
 
 ```yaml
 dependencies:
@@ -15,7 +19,7 @@ dependencies:
 
   ...
   # marquee
-  flutter_vertical_marquee: ^0.2.2
+  flutter_vertical_marquee: $latest_version
 ```
 
 import in dart:
